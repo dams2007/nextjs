@@ -1,5 +1,7 @@
+"use client"
+
 import Link from 'next/link';
-import React, { ReactNode } from 'react'
+import React  from 'react'
 
 const links = [
     {
@@ -41,8 +43,11 @@ const Navbar = () => {
         <Link href="/">Damien Bigot</Link>
         <div>
         {links.map(link=>(
-            <Link key={link.id} href={link.url}>{link.title}</Link>
+            <Link key={link.id} href={link.url}>
+                {link.title}
+            </Link>
         ))}
+        <button onClick={()=>{console.log("loggged out")}}>Logout</button>
         </div>
     
     </div>
