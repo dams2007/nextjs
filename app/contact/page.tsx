@@ -5,7 +5,7 @@ import Button from "../components/Button/Button";
 import Hero from "../../public/contact.png";
 
 export const metadata = {
-  title: "Lama Dev Contact Information",
+  title: "Damien Bigot",
   description: "This is Contact Page",
 };
 
@@ -17,7 +17,7 @@ const Contact = () => {
         <div className={styles.imgContainer}>
           <Image
             src={Hero}
-            alt=""
+            alt="test"
             fill={true}
             className={styles.image}
           />
@@ -31,7 +31,7 @@ const Contact = () => {
             cols={30}
             rows={10}
           ></textarea>
-          <Button url="#" text="Send"/>
+          <Button url="" text="Send"/>
         </form>
       </div>
     </div>
