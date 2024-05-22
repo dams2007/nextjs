@@ -1,59 +1,60 @@
-import React from 'react';
+"use client"
+import React, { ReactNode, useEffect, useState } from 'react';
 import styles from './page.module.css';
-import Link from "next/link";
-import Image from "next/image";
+import { get } from "../utils/http"
+import BlogPosts, {BlogPost} from "./blogPost"
 
-const Blog = () => {
+export type RawDataBlogPost = {
+  id: number;
+  title: string;
+  body: string;
+};
+
+export default function Blog() {
+
+  const [fetchedPosts, setFetchedPost] = useState<BlogPost[]>();
+  const [isFetching, setIsFetching] = useState(false);
+  const[error, setError] = useState<string>();
+
+  useEffect(() => {
+    async function fetchedPosts() {
+      setIsFetching(true);
+      try {
+        const data = (await get('https://jsonplaceholder.typicode.com/posts'
+        )) as RawDataBlogPost[];
+        
+        const blogPosts:BlogPost[] = data.map(rawPost => {
+          return {
+            id: rawPost.id,
+            title: rawPost.title,
+            body: rawPost.body
+          }
+        });
+        setFetchedPost(blogPosts);
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
+        }
+      }
+
+      setIsFetching(false);
+    }
+    fetchedPosts();
+  },[]);
+
+  let content: ReactNode;
+
+  if (fetchedPosts) {
+    content = <BlogPosts posts={fetchedPosts} />
+  }
+
+  if (isFetching) {
+    content = <p id="loading-fallback">Fetching posts...</p>
+  }
+
   return (
     <div className={styles.mainContainer}>
-      
-        <Link href="blog/testId" className={styles.container}>
-          <div className={styles.imageContainer}>
-            <Image
-              src="https://i.pinimg.com/originals/03/3a/ef/033aef6f9b8c975928ffe27b5e37c446.jpg"
-              alt=""
-              width={400}
-              height={250}
-              className={styles.image}
-            />
-          </div>
-          <div className={styles.content}>
-            <h1 className={styles.title}>test</h1>
-            <p className={styles.desc}>desc</p>
-          </div>
-        </Link>
-        <Link href="blog/testId" className={styles.container}>
-          <div className={styles.imageContainer}>
-            <Image
-              src="https://i.pinimg.com/originals/03/3a/ef/033aef6f9b8c975928ffe27b5e37c446.jpg"
-              alt=""
-              width={400}
-              height={250}
-              className={styles.image}
-            />
-          </div>
-          <div className={styles.content}>
-            <h1 className={styles.title}>test</h1>
-            <p className={styles.desc}>desc</p>
-          </div>
-        </Link>
-        <Link href="blog/testId" className={styles.container}>
-          <div className={styles.imageContainer}>
-            <Image
-              src="https://i.pinimg.com/originals/03/3a/ef/033aef6f9b8c975928ffe27b5e37c446.jpg"
-              alt=""
-              width={400}
-              height={250}
-              className={styles.image}
-            />
-          </div>
-          <div className={styles.content}>
-            <h1 className={styles.title}>test</h1>
-            <p className={styles.desc}>desc</p>
-          </div>
-        </Link>
+      {content}
     </div>
   );
 }
-
-export default Blog
