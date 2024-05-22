@@ -1,10 +1,8 @@
-import React from 'react'
-import styles from './page.module.css'
+import React from "react";
+import styles from "./page.module.css";
 
 const Register = () => {
-  return (
-    <div className={styles.container}>Register</div>
-  );
-}
+	return <div className={styles.container}>Register</div>;
+};
 
-export default Register
+export default Register;
