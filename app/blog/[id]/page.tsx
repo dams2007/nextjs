@@ -1,14 +1,31 @@
-import React from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import styles from "./page.module.css";
 import Image from "next/image";
+import { get } from "../../utils/http";
 
-const BlogPost = () => {
+type propsBlogPost = {
+	params: any | undefined;
+};
+
+export type RawDataDetailBlogPost = {
+	id: number;
+	title: string;
+	body: string;
+};
+
+const BlogPost = async ({ params }: propsBlogPost) => {
+	const data = (await get(
+		`https://jsonplaceholder.typicode.com/posts/${params.id}`
+	)) as RawDataDetailBlogPost;
+
+	console.log(data.title);
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.top}>
 				<div className={styles.info}>
-					<h1 className={styles.title}>TEST</h1>
-					<p className={styles.desc}>TEST</p>
+					<h1 className={styles.title}>{data.title}</h1>
+					<p className={styles.desc}>{data.body}</p>
 					<div className={styles.author}>
 						<Image
 							src="https://images.pexels.com/photos/157661/young-woman-shooting-model-157661.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
@@ -17,7 +34,7 @@ const BlogPost = () => {
 							height={40}
 							className={styles.avatar}
 						/>
-						<span className={styles.username}>TEST</span>
+						<span className={styles.username}>Jane</span>
 					</div>
 				</div>
 				<div className={styles.imageContainer}>
@@ -30,7 +47,7 @@ const BlogPost = () => {
 				</div>
 			</div>
 			<div className={styles.content}>
-				<p className={styles.text}></p>
+				<p className={styles.text}>{data.body}</p>
 			</div>
 		</div>
 	);
