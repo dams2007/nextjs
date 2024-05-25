@@ -18,9 +18,7 @@ export type RawDataDetailBlogPost = {
 
 const BlogPost = async ({ params }: propsBlogPost) => {
 	const id = params.id as string;
-	const data = (await get(
-		`http://localhost:3000/api/posts/${id}`
-	)) as RawDataDetailBlogPost;
+	const data = (await get(`/api/posts/${id}`, false)) as RawDataDetailBlogPost;
 
 	return (
 		<div className={styles.container}>

@@ -17,7 +17,8 @@ export type RawDataPortfolio = {
 
 const Category = async ({ params }: propsCategory) => {
 	const data = (await get(
-		"https://jsonplaceholder.typicode.com/posts"
+		"https://jsonplaceholder.typicode.com/posts",
+		true
 	)) as RawDataPortfolio[];
 	return (
 		<div className={styles.container}>

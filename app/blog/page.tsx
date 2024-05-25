@@ -12,9 +12,7 @@ export type RawDataBlogPost = {
 };
 
 const Blog = async () => {
-	const data = (await get(
-		"http://localhost:3000/api/posts"
-	)) as RawDataBlogPost[];
+	const data = (await get("/api/posts", false)) as RawDataBlogPost[];
 	return (
 		<div className={styles.mainContainer}>
 			{data.map((item) => (
