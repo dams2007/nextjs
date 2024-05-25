@@ -1,56 +1,45 @@
-"use client";
-import React, { ReactNode, useEffect, useState } from "react";
+import React from "react";
 import styles from "./page.module.css";
-import { get } from "../utils/http";
-import BlogPosts, { BlogPost } from "./blogPost";
+import get from "../utils/http";
+import Image from "next/image";
+import Link from "next/link";
 
 export type RawDataBlogPost = {
-	id: number;
+	_id: string;
 	title: string;
-	body: string;
+	image: string;
+	content: string;
 };
 
-export default function Blog() {
-	const [fetchedPosts, setFetchedPost] = useState<BlogPost[]>();
-	const [isFetching, setIsFetching] = useState(false);
-	const [error, setError] = useState<string>();
+const Blog = async () => {
+	const data = (await get(
+		"http://localhost:3000/api/posts"
+	)) as RawDataBlogPost[];
+	return (
+		<div className={styles.mainContainer}>
+			{data.map((item) => (
+				<Link
+					href={`/blog/${item._id}`}
+					className={styles.container}
+					key={item._id}
+				>
+					<div className={styles.imageContainer}>
+						<Image
+							src={item.image}
+							alt=""
+							width={400}
+							height={250}
+							className={styles.image}
+						/>
+					</div>
+					<div className={styles.content}>
+						<h1 className={styles.title}>{item.title}</h1>
+						<p className={styles.desc}>{item.content}</p>
+					</div>
+				</Link>
+			))}
+		</div>
+	);
+};
 
-	useEffect(() => {
-		async function fetchedPosts() {
-			setIsFetching(true);
-			try {
-				const data = (await get(
-					"https://jsonplaceholder.typicode.com/posts"
-				)) as RawDataBlogPost[];
-
-				const blogPosts: BlogPost[] = data.map((rawPost) => {
-					return {
-						id: rawPost.id,
-						title: rawPost.title,
-						body: rawPost.body,
-					};
-				});
-				setFetchedPost(blogPosts);
-			} catch (error) {
-				if (error instanceof Error) {
-					setError(error.message);
-				}
-			}
-
-			setIsFetching(false);
-		}
-		fetchedPosts();
-	}, []);
-
-	let content: ReactNode;
-
-	if (fetchedPosts) {
-		content = <BlogPosts posts={fetchedPosts} />;
-	}
-
-	if (isFetching) {
-		content = <p id="loading-fallback">Fetching posts...</p>;
-	}
-
-	return <div className={styles.mainContainer}>{content}</div>;
-}
+export default Blog;
