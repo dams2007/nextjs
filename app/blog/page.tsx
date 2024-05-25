@@ -1,30 +1,31 @@
 import React from "react";
 import styles from "./page.module.css";
-import { get } from "../utils/http";
+import get from "../utils/http";
 import Image from "next/image";
 import Link from "next/link";
 
 export type RawDataBlogPost = {
-	id: number;
+	_id: string;
 	title: string;
-	body: string;
+	image: string;
+	content: string;
 };
 
 const Blog = async () => {
 	const data = (await get(
-		"https://jsonplaceholder.typicode.com/posts"
+		"http://localhost:3000/api/posts"
 	)) as RawDataBlogPost[];
 	return (
 		<div className={styles.mainContainer}>
 			{data.map((item) => (
 				<Link
-					href={`/blog/${item.id}`}
+					href={`/blog/${item._id}`}
 					className={styles.container}
-					key={item.id}
+					key={item._id}
 				>
 					<div className={styles.imageContainer}>
 						<Image
-							src="https://i.pinimg.com/originals/03/3a/ef/033aef6f9b8c975928ffe27b5e37c446.jpg"
+							src={item.image}
 							alt=""
 							width={400}
 							height={250}
@@ -33,7 +34,7 @@ const Blog = async () => {
 					</div>
 					<div className={styles.content}>
 						<h1 className={styles.title}>{item.title}</h1>
-						<p className={styles.desc}>{item.body}</p>
+						<p className={styles.desc}>{item.content}</p>
 					</div>
 				</Link>
 			))}
