@@ -4,18 +4,13 @@ import Button from "@/app/components/Button/Button";
 import Image from "next/image";
 import get from "../../utils/http";
 
-// Need to improve this
-type propsCategory = {
-	params: any | undefined;
-};
-
 export type RawDataPortfolio = {
 	id: number;
 	title: string;
 	body: string;
 };
 
-const Category = async ({ params }: propsCategory) => {
+async function Category({ params }: { params: { category: string } }) {
 	const data = (await get(
 		"https://jsonplaceholder.typicode.com/posts",
 		true
@@ -42,5 +37,5 @@ const Category = async ({ params }: propsCategory) => {
 			))}
 		</div>
 	);
-};
+}
 export default Category;

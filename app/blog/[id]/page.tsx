@@ -3,10 +3,6 @@ import styles from "./page.module.css";
 import Image from "next/image";
 import get from "../../utils/http";
 
-type propsBlogPost = {
-	params: any | undefined;
-};
-
 export type RawDataDetailBlogPost = {
 	id: string;
 	title: string;
@@ -16,7 +12,7 @@ export type RawDataDetailBlogPost = {
 	username: string;
 };
 
-const BlogPost = async ({ params }: propsBlogPost) => {
+async function BlogPost({ params }: { params: { id: string } }) {
 	const id = params.id as string;
 	const data = (await get(`/api/posts/${id}`, false)) as RawDataDetailBlogPost;
 
@@ -51,6 +47,6 @@ const BlogPost = async ({ params }: propsBlogPost) => {
 			</div>
 		</div>
 	);
-};
+}
 
 export default BlogPost;
